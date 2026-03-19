@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Control — Технический Аудит</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-color: #0d1117;
+  --panel-bg: #161b22;
+  --border-color: #30363d;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --accent-color: #58a6ff;
+  --danger-color: #f85149;
+  --success-color: #3fb950;
+  --warning-color: #d29922;
+  --purple-color: #bc8cff;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background-color: var(--bg-color); color: var(--text-primary); line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+header { border-bottom: 1px solid var(--border-color); padding-bottom: 24px; margin-bottom: 40px; }
+h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; color: #fff; }
+h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 16px; color: #fff; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+h3 { font-size: 1.1rem; font-weight: 600; margin-top: 24px; margin-bottom: 12px; color: var(--accent-color); }
+p { margin-bottom: 16px; }
+.subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+.card { background-color: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; }
+.metric { margin-bottom: 20px; }
+.metric-value { font-size: 2.5rem; font-weight: 700; font-family: var(--font-mono); line-height: 1.2; }
+.metric-label { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.metric.green .metric-value { color: var(--success-color); }
+.metric.red .metric-value { color: var(--danger-color); }
+.metric.blue .metric-value { color: var(--accent-color); }
+.metric.warning .metric-value { color: var(--warning-color); }
+table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.9rem; }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); }
+th { color: var(--text-secondary); font-weight: 600; background-color: rgba(22, 27, 34, 0.5); }
+tr:hover { background-color: rgba(255, 255, 255, 0.02); }
+code { font-family: var(--font-mono); background: rgba(110, 118, 129, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+.b-green { background: rgba(63, 185, 80, 0.1); border: 1px solid rgba(63, 185, 80, 0.4); color: var(--success-color); }
+.b-red { background: rgba(248, 81, 73, 0.1); border: 1px solid rgba(248, 81, 73, 0.4); color: var(--danger-color); }
+.b-blue { background: rgba(88, 166, 255, 0.1); border: 1px solid rgba(88, 166, 255, 0.4); color: var(--accent-color); }
+.b-warning { background: rgba(210, 153, 34, 0.1); border: 1px solid rgba(210, 153, 34, 0.4); color: var(--warning-color); }
+.issue-list { list-style: none; }
+.issue-item { display: flex; align-items: flex-start; margin-bottom: 16px; padding: 16px; background: rgba(248, 81, 73, 0.05); border-left: 3px solid var(--danger-color); border-radius: 0 6px 6px 0; }
+.issue-item.warning { border-left-color: var(--warning-color); background: rgba(210, 153, 34, 0.05); }
+.issue-icon { margin-right: 16px; font-size: 1.2rem; }
+.issue-content h4 { color: #fff; margin-bottom: 4px; font-size: 1rem; }
+.issue-content p { margin-bottom: 0; font-size: 0.9rem; color: var(--text-secondary); }
+.diagram-box { background: var(--panel-bg); border: 1px dashed var(--border-color); border-radius: 6px; padding: 30px; text-align: center; margin-bottom: 40px; font-family: var(--font-mono); color: var(--text-secondary); }
+.role-card { background: var(--panel-bg); border-top: 3px solid var(--accent-color); border-radius: 6px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.role-header { display: flex; align-items: center; margin-bottom: 16px; }
+.role-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(88, 166, 255, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 16px; color: var(--accent-color); }
+.role-name { font-weight: 600; color: #fff; font-size: 1.1rem; }
+.score-box { text-align: center; padding: 40px; background: linear-gradient(180deg, var(--panel-bg) 0%, rgba(22, 27, 34, 0) 100%); border: 1px solid var(--border-color); border-radius: 12px; margin: 40px 0; }
+.score-number { font-size: 5rem; font-weight: 700; color: var(--accent-color); line-height: 1; font-family: var(--font-mono); }
+.score-label { font-size: 1.2rem; font-weight: 600; color: #fff; margin-top: 10px; }
+nav ul { display: flex; list-style: none; gap: 20px; overflow-x: auto; padding-bottom: 10px; }
+nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; white-space: nowrap; }
+nav a:hover { color: var(--accent-color); }
+.section { padding-top: 60px; margin-top: -40px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Mission Control: Технический Аудит</h1>
+    <p class="subtitle">Результаты глубокого исследования Data Lakehouse (v1.0.0)</p>
+    <div style="display: flex; gap: 10px; margin-top: 16px;">
+      <span class="badge b-blue">ClickHouse</span>
+      <span class="badge b-green">Airflow</span>
+      <span class="badge b-blue">API Integration</span>
+      <span class="badge b-warning">В работе</span>
+      <span style="color: var(--text-secondary); font-size: 0.85rem; margin-left: auto;">Срез данных: 17 Марта 2026</span>
+    </div>
+  </header>
+
+  <nav style="position: sticky; top: 0; background: var(--bg-color); z-index: 100; padding: 15px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 40px;">
+    <ul>
+      <li><a href="#overview">Обзор Системы</a></li>
+      <li><a href="#architecture">Архитектура</a></li>
+      <li><a href="#etl">ETL & Интеграции</a></li>
+      <li><a href="#data-quality">Качество Данных</a></li>
+      <li><a href="#metrics">Бизнес-Метрики</a></li>
+      <li><a href="#expert-review">Оценка Ролей</a></li>
+      <li><a href="#conclusion">Вердикт</a></li>
+    </ul>
+  </nav>
+
+  <!-- OVERVIEW -->
+  <section id="overview" class="section">
+    <h2>1. Обзор Системы</h2>
+    <p>Mission Control — это аналитическое хранилище данных (Data Lakehouse) для e-commerce компаний. Основная цель — агрегация данных о продажах с маркетплейсов (Wildberries, Ozon, Yandex.Market, Zalando) и синхронизация их с учётными системами (1C) для расчёта unit-экономики и 7 уровней маржинальности (M1-M7).</p>
+    
+    <div class="grid-3">
+      <div class="card">
+        <div class="metric blue">
+          <div class="metric-value">10.8M</div>
+          <div class="metric-label">Сырых записей</div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Таблица <code>default.raw_data</code>, размер на диске ~119MB (очень высокая степень сжатия ClickHouse).</p>
+      </div>
+      <div class="card">
+        <div class="metric green">
+          <div class="metric-value">3</div>
+          <div class="metric-label">Года исторических данных</div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Данные собираются непрерывно с января 2023 года по март 2026.</p>
+      </div>
+      <div class="card">
+        <div class="metric warning">
+          <div class="metric-value">12.9K</div>
+          <div class="metric-label">Уникальных SKU</div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Из них реально активно продаются (выручка > 0) около 8,700 артикулов.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section id="architecture" class="section">
+    <h2>2. Архитектура</h2>
+    <p>Система построена на базе колоночной СУБД ClickHouse, которая выступает и как хранилище сырых данных (Data Lake), и как витрина (Data Mart) через механизм Materialized Views и Views с расчетом метрик On-the-Fly.</p>
+    
+    <div class="diagram-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto;">
+        <div style="border: 1px solid var(--accent-color); padding: 10px; border-radius: 4px; width: 120px;">
+          <div>ETL (Airflow)</div>
+          <div style="font-size: 0.7em;">Python API Клиенты</div>
+        </div>
+        <div style="color: var(--accent-color);">━━▶</div>
+        <div style="border: 1px solid var(--success-color); padding: 10px; border-radius: 4px; width: 150px;">
+          <div>Raw Data</div>
+          <div style="font-size: 0.7em;">MergeTree</div>
+        </div>
+        <div style="color: var(--success-color);">━━▶</div>
+        <div style="border: 1px solid var(--warning-color); padding: 10px; border-radius: 4px; width: 150px;">
+          <div>Dicts / Ref Data</div>
+          <div style="font-size: 0.7em;">1C Catalogs</div>
+        </div>
+        <div style="color: var(--warning-color);">━━▶</div>
+        <div style="border: 1px solid var(--purple-color); padding: 10px; border-radius: 4px; width: 150px;">
+          <div>BI Views</div>
+          <div style="font-size: 0.7em;">24Kb SQL M1-M7 Logic</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Схема Данных (Star Schema)</h3>
+        <ul>
+          <li><strong>Fact Table:</strong> <code>raw_data</code> (10.8M строк). Хранит события — продажи, логистика, хранение, штрафы. Типовое поле `doc_type` определяет бизнес-суть записи.</li>
+          <li><strong>Dimensions:</strong> <code>ref_product</code> (каталог 1C), <code>ref_companies</code> (юрлица), <code>ref_brand</code>.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Бизнес-логика (Проблема монолита)</h3>
+        <p>Расчёт метрик M1-M7 реализован внутри гигантского SQL VIEW (размер запроса <strong>24 KB</strong>), который делает 7 уровней JOIN'ов и агрегаций <code>ON FLY</code>.</p>
+        <p><em>Антипаттерн:</em> Отсутствует промежуточный слой (dbt модели), что усложняет отладку и версионирование бизнес-логики.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETL -->
+  <section id="etl" class="section">
+    <h2>3. ETL Процессы и Интеграции</h2>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Источник</th>
+          <th>Статус</th>
+          <th>Механизм</th>
+          <th>Объем данных</th>
+          <th>Оценка</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Wildberries</strong></td>
+          <td><span class="badge b-green">Активен</span></td>
+          <td>Airflow -> API statistics (v1)</td>
+          <td>~85% всего объема</td>
+          <td>Стабильно, но API v1 WB устаревает</td>
+        </tr>
+        <tr>
+          <td><strong>Ozon</strong></td>
+          <td><span class="badge b-green">Активен</span></td>
+          <td>API /v2/analytics/data</td>
+          <td>~15% объема</td>
+          <td>Работает штатно</td>
+        </tr>
+        <tr>
+          <td><strong>1C ERP</strong></td>
+          <td><span class="badge b-green">Активен</span></td>
+          <td>OData / Webhook</td>
+          <td>Каталог + Себестоимость</td>
+          <td>Справочник обновляется (12.3K записей)</td>
+        </tr>
+        <tr>
+          <td><strong>Yandex.Market</strong></td>
+          <td><span class="badge b-warning">Холостой ход</span></td>
+          <td>API</td>
+          <td>0 в фактах</td>
+          <td>Интеграция есть, но продажи не фиксируются</td>
+        </tr>
+        <tr>
+          <td><strong>Zalando</strong></td>
+          <td><span class="badge b-red">Заброшен</span></td>
+          <td>API</td>
+          <td>Мертв с Июня 2023</td>
+          <td>Интеграция заморожена, код остался</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- DATA QUALITY -->
+  <section id="data-quality" class="section">
+    <h2>4. Качество Данных (Data Quality Alerts)</h2>
+    <p>Обнаружен ряд критических проблем архитектурного и процессного характера.</p>
+
+    <div class="issue-list">
+      <div class="issue-item">
+        <div class="issue-icon">🚨</div>
+        <div class="issue-content">
+          <h4>Критическая ошибка JOIN: mktId Type Mismatch</h4>
+          <p>В таблице <code>raw_data</code> поле <code>mktId</code> (код товара маркетплейса) хранится как <strong>String</strong>. В справочнике <code>ref_product</code> — как <strong>Int64</strong>. При JOIN система тратит ресурсы на неявное приведение типов (CAST). В 2% случаев это приводит к `NULL` и "потере" прибыли для конкретных SKU.</p>
+        </div>
+      </div>
+      
+      <div class="issue-item">
+        <div class="issue-icon">🚨</div>
+        <div class="issue-content">
+          <h4>Декартово произведение: Умножение строк ×7</h4>
+          <p>При соединении данных Ozon по схеме <code>1-to-many</code> без чётко определенного уникального ключа (SKU + Date + Warehouse) происходит задвоение строк. В одном из тестовых окон 10,000 фактов логистики превратились в 70,000 после JOIN со справочником складов.</p>
+        </div>
+      </div>
+
+      <div class="issue-item warning">
+        <div class="issue-icon">⚠️</div>
+        <div class="issue-content">
+          <h4>Засорение справочника (Data Swamp)</h4>
+          <p>32% артикулов в каталоге не имеют ни <code>mktId</code>, ни привязки к бренду. Это "мертвые души" из 1С, которые выгружаются в аналитику, но никогда не продадутся. Они занимают память и замедляют построение фильтров в BI.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METRICS -->
+  <section id="metrics" class="section">
+    <h2>5. Бизнес-Метрики (Найденные Инсайты)</h2>
+    <p>Система, несмотря на технические шероховатости, успешно выполняет главную функцию — расчёт чистой прибыли.</p>
+    
+    <div class="grid-2">
+      <div class="card">
+        <h3>Эффективность компаний (ROI & Margin)</h3>
+        <table style="margin-top: 10px;">
+          <tr><th>Юр. Лицо</th><th>Доля рынка</th><th>ROI</th><th>M7 Маржинальность</th></tr>
+          <tr><td>ООО Фабрика</td><td>92.1%</td><td style="color: var(--success-color)">2.0</td><td style="color: var(--success-color)">10.5%</td></tr>
+          <tr><td>ООО АКА</td><td>5.1%</td><td style="color: var(--danger-color)">-1.4</td><td style="color: var(--danger-color)">4.2% (убыток после ФОТ)</td></tr>
+          <tr><td>ИП Глебова</td><td>2.6%</td><td style="color: var(--warning-color)">0.8</td><td>6.7%</td></tr>
+        </table>
+      </div>
+      
+      <div class="card">
+        <h3>Аномалии ценообразования</h3>
+        <ul>
+          <li><strong>Fake Discounts:</strong> 44% всех продаж (4.7M транзакций) проходят со скидкой 80% и выше от базовой розничной цены (БРЦ). Базовые цены искусственно завышены.</li>
+          <li><strong>Logistic Freeze:</strong> Среднее время от заказа (Ordered) до продажи (Sale) составляет 4.8 дня (5 дней).</li>
+          <li><strong>Toxic SKU:</strong> 13.1% ассортимента (1,609 SKU) генерируют чистый минус (M7 < 0). Лидер антирейтинга — группа товаров ФА_МОД354А.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERT REVIEW -->
+  <section id="expert-review" class="section">
+    <h2>6. Оценка от Лиц Системы</h2>
+    
+    <div class="role-card">
+      <div class="role-header">
+        <div class="role-icon">🧑‍💻</div>
+        <div class="role-name">Мнение Data Engineer</div>
+      </div>
+      <p>"ClickHouse настроен хорошо базово, но архитектура пайплайнов хрупкая. Нет промежуточного слоя трансформации (dbt). Весь код живет в огромных SQL Views. Если формат выгрузки Wildberries завтра поменяется на один столбец — ляжет вся система, и отладить 24KB SQL монолит будет адом. Type Mismatch на ключе JOIN'а — это детский сад, который сжирает ресурсы сервера."</p>
+    </div>
+
+    <div class="role-card" style="border-top-color: var(--success-color)">
+      <div class="role-header">
+        <div class="role-icon" style="color: var(--success-color); background: rgba(63, 185, 80, 0.1);">📊</div>
+        <div class="role-name">Мнение Data Analyst</div>
+      </div>
+      <p>"Аналитическая ценность высочайшая. Система считает P&L до копейки на уровне каждого артикула, понимает ROI запасов. Я вижу, что ООО АКА тянет нас на дно (-1.4 ROI), а ООО Фабрика генерит кэш. Но! 32% мусора в каталоге бесят, а отсутствие прогнозирования (Predictive) делает нас слепыми на горизонте месяца."</p>
+    </div>
+
+    <div class="role-card" style="border-top-color: var(--purple-color)">
+      <div class="role-header">
+        <div class="role-icon" style="color: var(--purple-color); background: rgba(188, 140, 255, 0.1);">🏗️</div>
+        <div class="role-name">Мнение Architect</div>
+      </div>
+      <p>"Система зависла в состоянии 'Сделали MVP, оно заработало, и мы боимся это трогать'. Отсутствует слой мониторинга (Prometheus/Grafana). Нет CI/CD для версионирования SQL-схем (Liquibase/Flyway). Технический долг копится. Интеграции Zalando надо отпиливать. Yandex надо либо чинить, либо отпиливать."</p>
+    </div>
+  </section>
+
+  <!-- CONCLUSION -->
+  <section id="conclusion" class="section">
+    <h2>7. Вердикт</h2>
+    
+    <div class="score-box">
+      <div class="score-number">64/100</div>
+      <div class="score-label">Technical Health Score</div>
+      <p style="margin-top: 16px; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto;">
+        Проект успешно решает сложную бизнес-задачу учета на маркетплейсах, но находится в зоне высокого риска из-за накопленного технического долга и отсутствия инженерных стандартов (dbt, CI/CD, мониторинг).
+      </p>
+    </div>
+
+    <h3>Рекомендации (Tech Backlog)</h3>
+    <ol style="margin-left: 20px; color: var(--text-secondary); line-height: 1.8;">
+      <li><strong style="color: #fff">Data Typing:</strong> Мигрировать <code>raw_data.mktId</code> в Int64. Перестроить партиции.</li>
+      <li><strong style="color: #fff">Refactoring:</strong> Внедрить `dbt`. Разбить 24KB монстра-запрос на staged views (stg_wb, stg_ozon, int_margins, mart_pnL).</li>
+      <li><strong style="color: #fff">Observability:</strong> Поднять Grafana поверх ClickHouse `system.query_log` для ловли тяжелых запросов и алертинга на отсутствие инсертов ночью.</li>
+      <li><strong style="color: #fff">Cleanup:</strong> Дропнуть код и таблицы по Zalando. Фильтровать выгрузку 1С (не вливать товары без брендов).</li>
+    </ol>
+  </section>
+
+</div>
+
+</body>
+</html>
