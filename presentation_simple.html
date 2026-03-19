@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Control — Простыми Словами</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#fafbfc;--surface:#fff;--surface2:#f1f5f9;--border:#e2e8f0;
+  --accent:#6366f1;--accent-soft:#eef2ff;--green:#059669;--green-soft:#ecfdf5;
+  --red:#dc2626;--red-soft:#fef2f2;--yellow:#d97706;--yellow-soft:#fffbeb;
+  --blue:#2563eb;--blue-soft:#eff6ff;
+  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+.slide{min-height:100vh;padding:60px 80px;display:flex;flex-direction:column;justify-content:center;max-width:1200px;margin:0 auto}
+.slide-full{min-height:100vh;padding:60px 80px;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--border)}
+h1{font-size:3.6rem;font-weight:900;letter-spacing:-.04em;color:var(--text);margin-bottom:16px}
+h1 .hl{background:linear-gradient(135deg,var(--accent),#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:2rem;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:28px}
+h2 .emoji{font-size:1.6rem;margin-right:8px}
+h3{font-size:1.1rem;font-weight:700;color:var(--accent);margin:20px 0 10px;letter-spacing:-.01em}
+.subtitle{font-size:1.2rem;color:var(--text2);max-width:640px;line-height:1.8}
+.badge{display:inline-block;padding:6px 16px;border-radius:100px;font-size:.8rem;font-weight:700;letter-spacing:.02em}
+.badge-purple{background:var(--accent-soft);color:var(--accent)}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:32px;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.08);border-color:rgba(99,102,241,.3)}
+.card .icon{font-size:2.4rem;margin-bottom:12px}
+.card .title{font-size:1rem;font-weight:700;margin-bottom:6px}
+.card .desc{font-size:.9rem;color:var(--text2);line-height:1.6}
+.big-num{font-size:3.2rem;font-weight:900;letter-spacing:-.03em;line-height:1}
+.big-label{font-size:.85rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+.analogy{background:linear-gradient(135deg,var(--accent-soft),#f5f3ff);border-radius:20px;padding:36px;border:1.5px solid rgba(99,102,241,.2);margin:20px 0}
+.analogy .icon{font-size:2.8rem}
+.analogy .text{font-size:1.08rem;color:var(--text);line-height:1.8;margin-top:12px}
+.pro-con{display:flex;flex-direction:column;gap:12px}
+.pro-con .item{display:flex;gap:14px;align-items:flex-start;padding:16px 20px;border-radius:14px}
+.pro-con .item.pro{background:var(--green-soft);border:1px solid rgba(5,150,105,.15)}
+.pro-con .item.con{background:var(--red-soft);border:1px solid rgba(220,38,38,.15)}
+.pro-con .item.warn{background:var(--yellow-soft);border:1px solid rgba(217,119,6,.15)}
+.pro-con .item .icon{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.pro-con .item .text{font-size:.95rem}
+.pro-con .item .text strong{display:block;margin-bottom:2px}
+table{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--surface);border-radius:16px;overflow:hidden;border:1.5px solid var(--border)}
+th{text-align:left;padding:14px 20px;background:var(--surface2);color:var(--text2);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+td{padding:14px 20px;border-top:1px solid var(--border)}
+tr:hover td{background:rgba(99,102,241,.02)}
+.star-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.star-row:last-child{border:none}
+.star-row .label{flex:0 0 180px;font-weight:600;font-size:.95rem}
+.star-row .stars{flex:0 0 130px;color:var(--yellow);font-size:1.15rem;letter-spacing:2px}
+.star-row .note{color:var(--text2);font-size:.85rem}
+.score-circle{width:160px;height:160px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;margin:0 auto 20px;background:linear-gradient(135deg,var(--accent-soft),#f5f3ff);border:3px solid var(--accent)}
+.score-circle .num{font-size:3.5rem;font-weight:900;color:var(--accent);line-height:1}
+.score-circle .of{font-size:.9rem;color:var(--text3);font-weight:600}
+.cta{padding:24px 32px;border-radius:16px;margin:10px 0}
+.cta.green{background:var(--green-soft);border:1.5px solid rgba(5,150,105,.2)}
+.cta.blue{background:var(--blue-soft);border:1.5px solid rgba(37,99,235,.2)}
+.cta.yellow{background:var(--yellow-soft);border:1.5px solid rgba(217,119,6,.2)}
+.cta strong{font-size:1rem;display:block;margin-bottom:6px}
+.cta ul{padding-left:20px;color:var(--text2);font-size:.9rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.footer{text-align:center;padding:40px;color:var(--text3);font-size:.85rem;border-top:1px solid var(--border)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,251,252,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 40px;display:flex;align-items:center;gap:20px}
+nav .logo{font-weight:900;font-size:1rem;color:var(--accent);letter-spacing:-.02em}
+nav a{color:var(--text3);text-decoration:none;font-size:.8rem;font-weight:600;transition:.15s;padding:4px 10px;border-radius:6px}
+nav a:hover{color:var(--accent);background:var(--accent-soft)}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">✦ MISSION CONTROL</span>
+  <a href="#what">Что это</a>
+  <a href="#tasks">Задачи</a>
+  <a href="#numbers">Цифры</a>
+  <a href="#pros">Плюсы</a>
+  <a href="#cons">Минусы</a>
+  <a href="#score">Оценка</a>
+  <a href="#next">Что дальше</a>
+</nav>
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide-full" style="text-align:center;background:linear-gradient(180deg,#fff 0%,var(--accent-soft) 100%)">
+  <div style="max-width:800px;margin:0 auto">
+    <div class="badge badge-purple" style="margin-bottom:20px">Исследование системы</div>
+    <h1>Mission <span class="hl">Control</span></h1>
+    <p class="subtitle" style="margin:0 auto;font-size:1.3rem">Что это, зачем нужно, и стоит ли за это платить?<br>Объясняем простыми словами.</p>
+    <div class="grid g4" style="margin-top:48px;text-align:center">
+      <div><div class="big-num" style="color:var(--accent)">10.8M</div><div class="big-label">заказов</div></div>
+      <div><div class="big-num" style="color:var(--green)">750M₽</div><div class="big-label">выручка</div></div>
+      <div><div class="big-num" style="color:var(--yellow)">12,937</div><div class="big-label">товаров</div></div>
+      <div><div class="big-num" style="color:var(--text3)">3 года</div><div class="big-label">данных</div></div>
+    </div>
+    <p style="margin-top:40px;color:var(--text3);font-size:.85rem">19 марта 2026 · По данным тестовой базы</p>
+  </div>
+</div>
+
+<!-- SLIDE 2: WHAT IS IT -->
+<div class="slide-full" id="what">
+  <div style="max-width:1100px;margin:0 auto">
+    <h2><span class="emoji">🤔</span> Что это вообще такое?</h2>
+    <div class="two-col">
+      <div>
+        <p style="font-size:1.05rem;color:var(--text2);line-height:1.9">
+          Вы продаёте одежду одновременно на <strong style="color:var(--text)">Wildberries, Ozon, Yandex Market</strong> и <strong style="color:var(--text)">Zalando</strong>. У каждого маркетплейса — свой личный кабинет, свои отчёты, свои таблички. Плюс — бухгалтерия в 1С.
+        </p>
+        <p style="font-size:1.05rem;color:var(--text2);line-height:1.9;margin-top:16px">
+          Данные разбросаны по <strong style="color:var(--text)">5 разным местам</strong>. Как понять, приносит ли конкретная юбка прибыль или убыток?
+        </p>
+        <p style="font-size:1.1rem;color:var(--text);line-height:1.9;margin-top:16px;font-weight:600">
+          Mission Control собирает <u>все данные в одно место</u> и считает реальную прибыль по каждому товару, с учётом ВСЕХ расходов.
+        </p>
+      </div>
+      <div>
+        <div class="analogy">
+          <div class="icon">✈️</div>
+          <div class="text">
+            <strong>Аналогия:</strong> Это <em>приборная панель самолёта</em>. Пилот (владелец бизнеса) видит все показатели: скорость (продажи), высоту (маржу), топливо (остатки), и может принимать решения — куда лететь и когда снижаться.
+          </div>
+        </div>
+        <div class="analogy" style="background:linear-gradient(135deg,var(--green-soft),#f0fdfa)">
+          <div class="icon">🧮</div>
+          <div class="text">
+            Система считает <strong>7 уровней маржи</strong>: сначала выручка минус себестоимость, потом минус комиссия маркетплейса, потом доставка, реклама, хранение, штрафы, прочее. Не просто «продал за 1000», а <em>реальная картина</em>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: TASKS -->
+<div class="slide-full" id="tasks">
+  <div style="max-width:1100px;margin:0 auto">
+    <h2><span class="emoji">✅</span> Какие задачи решает?</h2>
+    <div class="grid g3">
+      <div class="card" style="border-color:rgba(5,150,105,.3)">
+        <div class="icon">💰</div>
+        <div class="title">Сколько зарабатываю на каждом товаре?</div>
+        <div class="desc">7 уровней маржи (M1→M7) — от валовой прибыли до чистого дохода с учётом всех расходов. Видно до копейки.</div>
+        <div style="margin-top:8px"><span class="badge" style="background:var(--green-soft);color:var(--green)">✅ Решает отлично</span></div>
+      </div>
+      <div class="card" style="border-color:rgba(5,150,105,.3)">
+        <div class="icon">📉</div>
+        <div class="title">На каком товаре теряю деньги?</div>
+        <div class="desc">Мы нашли: серия ФА_МОД354А (12 артикулов) — убыточна. А ФА_МОД44А/082 принёс <strong>2.4 млн₽</strong> прибыли за 2.5 мес!</div>
+        <div style="margin-top:8px"><span class="badge" style="background:var(--green-soft);color:var(--green)">✅ Решает отлично</span></div>
+      </div>
+      <div class="card" style="border-color:rgba(5,150,105,.3)">
+        <div class="icon">📦</div>
+        <div class="title">Сколько товара держать на складе?</div>
+        <div class="desc">Оборачиваемость + ROI запасов. У Фабрики ROI ≈ 2.0 — каждый рубль в запасах приносит 2₽/год. Отлично!</div>
+        <div style="margin-top:8px"><span class="badge" style="background:var(--green-soft);color:var(--green)">✅ Решает отлично</span></div>
+      </div>
+      <div class="card" style="border-color:rgba(217,119,6,.3)">
+        <div class="icon">🌐</div>
+        <div class="title">Как дела на всех маркетплейсах?</div>
+        <div class="desc">WB и Ozon — полностью. Залando и YM — данные собираются, но не обрабатываются. «2 камеры из 4 выключены».</div>
+        <div style="margin-top:8px"><span class="badge" style="background:var(--yellow-soft);color:var(--yellow)">⚠️ Частично</span></div>
+      </div>
+      <div class="card" style="border-color:rgba(220,38,38,.3)">
+        <div class="icon">🔮</div>
+        <div class="title">Что будет завтра?</div>
+        <div class="desc">Нет прогнозов. Система показывает прошлое и настоящее, но не будущее. Нет ML, нет forecasting.</div>
+        <div style="margin-top:8px"><span class="badge" style="background:var(--red-soft);color:var(--red)">❌ Не решает</span></div>
+      </div>
+      <div class="card" style="border-color:rgba(220,38,38,.3)">
+        <div class="icon">🚨</div>
+        <div class="title">Что-то сломалось!</div>
+        <div class="desc">Нет автоматических уведомлений. Если данные не обновились ночью — никто не узнает до утра.</div>
+        <div style="margin-top:8px"><span class="badge" style="background:var(--red-soft);color:var(--red)">❌ Не решает</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: NUMBERS -->
+<div class="slide-full" id="numbers" style="background:var(--surface2)">
+  <div style="max-width:1100px;margin:0 auto">
+    <h2><span class="emoji">📊</span> Цифры, которые говорят сами за себя</h2>
+    
+    <h3>Компании — кто зарабатывает?</h3>
+    <table style="margin-bottom:32px">
+      <tr><th>Компания</th><th>Доля</th><th>Выручка 2025</th><th>Прибыльность</th><th>Вердикт</th></tr>
+      <tr>
+        <td><strong>ООО Фабрика</strong></td>
+        <td>92% бизнеса</td>
+        <td style="font-weight:700;color:var(--green)">754M₽ (WB) + 116M₽ (Ozon)</td>
+        <td>ROI 2.0 · M7 10.5%</td>
+        <td><span class="badge" style="background:var(--green-soft);color:var(--green)">✅ Прибыльно</span></td>
+      </tr>
+      <tr>
+        <td>ООО АКА</td>
+        <td>5% бизнеса</td>
+        <td>43M₽ (WB) + 3.3M₽ (Ozon)</td>
+        <td style="color:var(--red)">ROI -1.4 · M7 4.2%</td>
+        <td><span class="badge" style="background:var(--red-soft);color:var(--red)">❌ Убыточно</span></td>
+      </tr>
+      <tr>
+        <td style="color:var(--text3)">ИП Кухарский</td>
+        <td>&lt;0.01%</td>
+        <td style="color:var(--text3)">191 заказ за год</td>
+        <td style="color:var(--red)">ROI -12.0</td>
+        <td><span class="badge" style="background:var(--surface2);color:var(--text3)">⚰️ Неактивен</span></td>
+      </tr>
+    </table>
+
+    <div class="grid g3">
+      <div class="card">
+        <div class="icon">🛒</div>
+        <div class="title">44% продаж со скидкой 80%</div>
+        <div class="desc">Зачёркнутые цены — стандартная практика маркетплейсов. Реальная цена товара — это цена после всех скидок.</div>
+      </div>
+      <div class="card">
+        <div class="icon">⏱️</div>
+        <div class="title">Заказ → Продажа = 5 дней</div>
+        <div class="desc">В среднем от заказа до выкупа проходит 4.8 дня. Максимум — 90 дней. Медиана — 4 дня.</div>
+      </div>
+      <div class="card">
+        <div class="icon">📈</div>
+        <div class="title">13% артикулов убыточны</div>
+        <div class="desc">1,609 из 12,300 артикулов работают в минус. Максимальный убыток по одному артикулу: -257% от выручки!</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:32px">Сезонность</h3>
+    <div class="grid g4">
+      <div class="card" style="text-align:center;border-color:rgba(5,150,105,.3)"><div style="font-size:2rem">🎄</div><div class="big-num" style="font-size:1.8rem;color:var(--green)">432K</div><div class="big-label">Декабрь — пик</div></div>
+      <div class="card" style="text-align:center;border-color:rgba(5,150,105,.2)"><div style="font-size:2rem">🛍️</div><div class="big-num" style="font-size:1.8rem;color:var(--text)">304K</div><div class="big-label">Ноябрь — Black Friday</div></div>
+      <div class="card" style="text-align:center;border-color:rgba(5,150,105,.1)"><div style="font-size:2rem">☀️</div><div class="big-num" style="font-size:1.8rem;color:var(--text2)">320K</div><div class="big-label">Июнь — лето</div></div>
+      <div class="card" style="text-align:center;border-color:rgba(220,38,38,.2)"><div style="font-size:2rem">❄️</div><div class="big-num" style="font-size:1.8rem;color:var(--red)">128K</div><div class="big-label">Январь — провал</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: PROS -->
+<div class="slide-full" id="pros">
+  <div style="max-width:1100px;margin:0 auto">
+    <h2><span class="emoji">💪</span> Сильные стороны</h2>
+    <div class="pro-con">
+      <div class="item pro">
+        <div class="icon">🧠</div>
+        <div class="text"><strong>Глубина аналитики</strong>7 уровней маржи, ROI, оборачиваемость, упущенная выгода. Не просто «выручка за месяц» — это управленческий учёт уровня CFO.</div>
+      </div>
+      <div class="item pro">
+        <div class="icon">🔗</div>
+        <div class="text"><strong>Всё в одном месте</strong>WB, Ozon, 1C, собственные склады — все данные сливаются воедино. Не нужно вручную собирать таблички из 5 кабинетов.</div>
+      </div>
+      <div class="item pro">
+        <div class="icon">📅</div>
+        <div class="text"><strong>3 года непрерывной истории</strong>С января 2023 — ни одного дня без данных. Можно видеть тренды, сезонность, рост и падение по каждому товару.</div>
+      </div>
+      <div class="item pro">
+        <div class="icon">⚡</div>
+        <div class="text"><strong>Быстрая база данных</strong>ClickHouse — одна из самых быстрых аналитических БД в мире. Запрос по 10 миллионам строк — за секунды, не минуты.</div>
+      </div>
+      <div class="item pro">
+        <div class="icon">🏢</div>
+        <div class="text"><strong>Мультитенантность</strong>3 юридических лица в одной системе — можно сравнивать их между собой. У Фабрики ROI = 2.0, у АКА = -1.4. Сразу видно, кто тянет вниз.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: CONS -->
+<div class="slide-full" id="cons" style="background:var(--surface2)">
+  <div style="max-width:1100px;margin:0 auto">
+    <h2><span class="emoji">😬</span> Слабые стороны</h2>
+    <div class="pro-con">
+      <div class="item con">
+        <div class="icon">🧱</div>
+        <div class="text"><strong>Монолитный «мозг»</strong>Вся бизнес-логика — в одном SQL-запросе на 24 килобайта. Это как написать роман одним предложением. Если ошибка — рушится вся аналитика.</div>
+      </div>
+      <div class="item con">
+        <div class="icon">🔮</div>
+        <div class="text"><strong>Нет прогнозов</strong>Показывает «что было», но не «что будет». Рынок давно перешёл к предиктивной аналитике. Конкуренты обгонят.</div>
+      </div>
+      <div class="item con">
+        <div class="icon">🔇</div>
+        <div class="text"><strong>Нет алертов</strong>Если ночью данные не обновились — никто не узнает. Продавец утром открывает отчёт, а там вчерашние цифры.</div>
+      </div>
+      <div class="item warn">
+        <div class="icon">🗑️</div>
+        <div class="text"><strong>Грязные данные</strong>32% товаров в каталоге — «мёртвые» записи без привязки к маркетплейсу. 23% — без указания бренда. Мусор засоряет аналитику.</div>
+      </div>
+      <div class="item warn">
+        <div class="icon">🔌</div>
+        <div class="text"><strong>2 маркетплейса из 4</strong>Залando мёртв с июня 2023. YM данные собирает, но не обрабатывает. Деньги на интеграцию потрачены, пользы нет.</div>
+      </div>
+      <div class="item con">
+        <div class="icon">🔐</div>
+        <div class="text"><strong>Зависимость от создателя</strong>Документация неполная, код нигде не хранится в понятной системе. Если уволится разработчик — понять систему будет очень сложно.</div>
+      </div>
+      <div class="item warn">
+        <div class="icon">🧩</div>
+        <div class="text"><strong>Несовместимость данных</strong>Код товара в таблице заказов — текст, а в каталоге — число. При каждом расчёте система тратит время на перевод. Могут быть ошибки.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: SCORE -->
+<div class="slide-full" id="score">
+  <div style="max-width:1100px;margin:0 auto">
+    <h2><span class="emoji">⭐</span> Итоговая оценка</h2>
+    
+    <div class="analogy" style="margin-bottom:32px;background:linear-gradient(135deg,#fff9db,#fef3c7)">
+      <div class="icon">🏠</div>
+      <div class="text">
+        <strong>Если коротко:</strong> Это как новый дом — кирпич отличный, фундамент крепкий, но нет электрики, водопровода и отопления. Жить можно, но с ведром и свечкой.
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div style="text-align:center">
+        <div class="score-circle">
+          <div class="num">6</div>
+          <div class="of">из 10</div>
+        </div>
+        <p style="font-size:1.1rem;font-weight:700;margin-bottom:4px">Крепкий фундамент</p>
+        <p style="color:var(--text2)">Но отсутствует современная «обвязка»</p>
+      </div>
+      <div>
+        <div class="star-row"><div class="label">База данных</div><div class="stars">★★★★★</div><div class="note">ClickHouse — мировой топ</div></div>
+        <div class="star-row"><div class="label">Бизнес-логика</div><div class="stars">★★★★☆</div><div class="note">7 уровней маржи</div></div>
+        <div class="star-row"><div class="label">Архитектура</div><div class="stars">★★★★☆</div><div class="note">Правильный подход</div></div>
+        <div class="star-row"><div class="label">Автоматизация</div><div class="stars">★★★☆☆</div><div class="note">Есть, но без мониторинга</div></div>
+        <div class="star-row"><div class="label">Чистота данных</div><div class="stars">★★☆☆☆</div><div class="note">32% мусора</div></div>
+        <div class="star-row"><div class="label">Мониторинг</div><div class="stars">★☆☆☆☆</div><div class="note">Отсутствует</div></div>
+        <div class="star-row"><div class="label">Документация</div><div class="stars">★★☆☆☆</div><div class="note">Частичная, устарела</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: NEXT -->
+<div class="slide-full" id="next" style="background:linear-gradient(180deg,var(--surface2) 0%,var(--accent-soft) 100%)">
+  <div style="max-width:1100px;margin:0 auto">
+    <h2><span class="emoji">🚀</span> Что дальше?</h2>
+    <p style="color:var(--text2);margin-bottom:28px;font-size:1.05rem">Для бизнеса с оборотом <strong style="color:var(--text)">750М₽+</strong> на WB такая аналитика критически необходима. Аналог на рынке стоит от 50 до 500 тысяч ₽/мес.</p>
+    
+    <div class="grid g3">
+      <div class="cta green">
+        <strong>🟢 Быстрые победы (1-2 недели)</strong>
+        <ul>
+          <li>Починить несовместимость типов mktId</li>
+          <li>Удалить 32% мёртвых записей из каталога</li>
+          <li>Добавить Telegram-алерты при сбоях</li>
+          <li>Удалить заброшенную интеграцию Залново</li>
+        </ul>
+      </div>
+      <div class="cta blue">
+        <strong>🔵 Средний горизонт (1-2 мес)</strong>
+        <ul>
+          <li>Разбить 24KB SQL на модульные части</li>
+          <li>Покрыть ключевые формулы автотестами</li>
+          <li>Интегрировать Yandex Market в отчёты</li>
+          <li>Задокументировать весь код</li>
+        </ul>
+      </div>
+      <div class="cta yellow">
+        <strong>🟡 Стратегические (2-6 мес)</strong>
+        <ul>
+          <li>Добавить мониторинг (Grafana)</li>
+          <li>ML-прогнозирование продаж</li>
+          <li>Ценовая оптимизация</li>
+          <li>CI/CD для data pipelines</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="analogy" style="margin-top:32px;text-align:center">
+      <div class="text" style="font-size:1.1rem">
+        <strong>Главный риск:</strong> Без документации и понятного кода владелец зависит от конкретного разработчика. <br>Именно этим мы сейчас и занимаемся — <em>документируем всё</em>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Mission Control · Исследование Antigravity + Claude Code · 19 марта 2026</div>
+
+</body>
+</html>
